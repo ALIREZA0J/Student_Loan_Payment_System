@@ -1,0 +1,13 @@
+package org.loanpayment.model.enums;
+
+public enum Section {
+
+    ASSOCIATE,
+    BACHELOR,
+    NON_CONTIGUOUS_BACHELOR,
+    MASTER,
+    NON_CONTIGUOUS_MASTER,
+    DOCTOR,
+    PROFESSIONAL_DOCTOR,
+    NON_CONTINUOUS_SPECIALIZED_DOCTOR
+}

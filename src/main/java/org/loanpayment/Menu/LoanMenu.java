@@ -283,7 +283,7 @@ public class LoanMenu {
 
     private static void depositingLoanMoneyToTheStudentAccount(Student student, Loan saveNewLoan) {
         BankCard bankCard = BANK_CARD_SERVICE.findByStudent(student).get();
-        bankCard.setInventory(saveNewLoan.getAmount());
+        bankCard.setInventory(bankCard.getInventory()+saveNewLoan.getAmount());
         BANK_CARD_SERVICE.saveOrUpdate(bankCard);
         System.out.println("The money has been deposited into your account.");
     }

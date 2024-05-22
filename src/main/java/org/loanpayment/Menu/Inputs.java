@@ -41,8 +41,7 @@ public class Inputs {
 
     protected static Semester CURRENT_SEMESTER = getCurrentSemester();
 
-    public static final PersianDate MANUAL_CURRENT_PERSIAN_DATE = PersianDate.of(1407,10,30);
-    public static final PersianDate CURRENT_PERSIAN_DATE = MANUAL_CURRENT_PERSIAN_DATE;
+    public static final PersianDate CURRENT_PERSIAN_DATE = PersianDate.now();
     public static final LocalDate CURRENT_DATE = CURRENT_PERSIAN_DATE.toGregorian();
 
 

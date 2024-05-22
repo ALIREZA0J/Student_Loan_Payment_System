@@ -1,5 +1,6 @@
 package org.loanpayment.service.student;
 
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -10,7 +11,7 @@ import org.loanpayment.repository.student.StudentRepository;
 import org.loanpayment.validation.NationalCodeValidation;
 
 import java.util.Optional;
-
+@Slf4j
 public class StudentServiceImpl extends BaseServiceImpl<Student,Long, StudentRepository> implements StudentService{
     public StudentServiceImpl(StudentRepository repository, SessionFactory sessionFactory) {
         super(repository, sessionFactory);
@@ -34,6 +35,7 @@ public class StudentServiceImpl extends BaseServiceImpl<Student,Long, StudentRep
 
     @Override
     public Optional<Student> findByNationalCode(String nationalCode) {
+        log.info("student findByNationalCode");
         try (Session session = sessionFactory.getCurrentSession()){
             session.beginTransaction();
             Optional<Student> student = repository.findByNationalCode(nationalCode);
@@ -50,6 +52,7 @@ public class StudentServiceImpl extends BaseServiceImpl<Student,Long, StudentRep
 
     @Override
     public Student registerStudent(Student student) {
+        log.info("student register");
         Transaction transaction = null ;
         try (Session session = sessionFactory.getCurrentSession()){
             transaction = session.beginTransaction();
@@ -68,6 +71,7 @@ public class StudentServiceImpl extends BaseServiceImpl<Student,Long, StudentRep
         }
         catch (Exception e){
             assert transaction != null;
+            log.error(e.getMessage());
             System.out.println(e.getMessage());
             transaction.rollback();
             return null;
@@ -76,6 +80,7 @@ public class StudentServiceImpl extends BaseServiceImpl<Student,Long, StudentRep
 
     @Override
     public Optional<Student> findByUsernameAndPassword(String username, String password) {
+        log.info("student findByUsernameAndPassword");
         try (Session session = sessionFactory.getCurrentSession()){
             session.beginTransaction();
             Optional<Student> student = repository.findByUsernameAndPassword(username, password);
@@ -85,6 +90,7 @@ public class StudentServiceImpl extends BaseServiceImpl<Student,Long, StudentRep
             return student;
         }
         catch (Exception e){
+            log.error(e.getMessage());
             System.out.println(e.getMessage());
             return Optional.empty();
         }

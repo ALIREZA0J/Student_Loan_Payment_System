@@ -2,6 +2,7 @@ package org.loanpayment.Menu;
 
 import com.github.mfathi91.time.PersianDate;
 import com.github.mfathi91.time.PersianMonth;
+import lombok.extern.slf4j.Slf4j;
 import org.loanpayment.model.Student;
 import org.loanpayment.model.enums.Section;
 
@@ -11,12 +12,13 @@ import static org.loanpayment.Menu.Inputs.*;
 import static org.loanpayment.Menu.InstallmentMenu.installmentMenu;
 import static org.loanpayment.Menu.LoanMenu.loanMenu;
 
-
+@Slf4j
 public class StudentMenu {
 
 
 
     private static void checkStudentGraduatedForRegisterLoan(Student student){
+        log.info("checkStudentGraduatedForRegisterLoan");
         LocalDate entriesYear = student.getSemester().getStartDate();
         Section section = student.getSection();
 
@@ -57,7 +59,7 @@ public class StudentMenu {
         }
     }
     private static void checkingTheLoanRegistrationTime(Student student) {
-
+        log.info("checkingTheLoanRegistrationTime");
         LocalDate startDateAban = PersianDate.of(CURRENT_PERSIAN_DATE.getYear(), PersianMonth.ABAN, 1).toGregorian();
         LocalDate endDateAban = startDateAban.plusWeeks(1);
         LocalDate startDateBahman = PersianDate.of(CURRENT_PERSIAN_DATE.getYear(), PersianMonth.BAHMAN, 25).toGregorian();
@@ -74,6 +76,7 @@ public class StudentMenu {
     }
 
     private static void checkStudentGraduatedForRepaymentInstallment(Student student){
+        log.info("checkStudentGraduatedForRepaymentInstallment");
         LocalDate entriesYear = student.getSemester().getStartDate();
         Section section = student.getSection();
 
@@ -116,6 +119,7 @@ public class StudentMenu {
 
 
     public static void studentDashboard(Student student) {
+        log.info("student dashboard start");
         boolean flag = true;
         while (flag) {
             System.out.println("|----------------------------------------|");

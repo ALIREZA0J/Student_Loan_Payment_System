@@ -1,6 +1,7 @@
 package org.loanpayment.Menu;
 
 import com.github.mfathi91.time.PersianDate;
+import lombok.extern.slf4j.Slf4j;
 import org.loanpayment.model.BankCard;
 import org.loanpayment.model.Installment;
 import org.loanpayment.model.Loan;
@@ -13,7 +14,7 @@ import java.util.List;
 
 import static org.loanpayment.Menu.Inputs.*;
 import static org.loanpayment.Menu.StudentMenu.studentDashboard;
-
+@Slf4j
 public class InstallmentMenu {
 
 
@@ -23,6 +24,7 @@ public class InstallmentMenu {
 
 
     public static void installmentMenu(Student student) {
+        log.info("installment menu start");
         boolean flag = true;
         while (flag) {
             System.out.println("|----------------------------------------|");
@@ -47,6 +49,7 @@ public class InstallmentMenu {
 
 
     private static void paidInstallment(Student student){
+        log.info("paidInstallment");
         LoanType loanType = getLoanType();
         List<Loan> loanListOfStudent = LOAN_SERVICE.findByStudentAndLoanType(student, loanType);
 
@@ -81,6 +84,7 @@ public class InstallmentMenu {
     }
 
     private static void unPaidInstallment(Student student){
+        log.info("unPaidInstallment");
         LoanType loanType = getLoanType();
         List<Loan> loanListOfStudent = LOAN_SERVICE.findByStudentAndLoanType(student, loanType);
         if (loanListOfStudent.isEmpty()){
@@ -117,6 +121,7 @@ public class InstallmentMenu {
     }
 
     private static void paymentInstallment(Student student){
+        log.info("paymentInstallment");
         BankCard bankCardOfStudent = BANK_CARD_SERVICE.findByStudent(student).get();
         List<Loan> loanList = LOAN_SERVICE.findByStudent(student);
         if (loanList.isEmpty()){
@@ -156,6 +161,7 @@ public class InstallmentMenu {
     }
 
     private static boolean checkBankCardOfStudentEqualBankCardData(BankCard bankCardOfStudent,BankCard bankCardData){
+        log.info("checkBankCardOfStudentEqualBankCardData");
         if (bankCardOfStudent.getCardNumber().equals(bankCardData.getCardNumber())
         && bankCardOfStudent.getCvv2().equals(bankCardData.getCvv2())
         && bankCardOfStudent.getExpirationDate().equals(bankCardData.getExpirationDate())
@@ -164,6 +170,7 @@ public class InstallmentMenu {
     }
 
     private static BankCard getBankCardData(){
+        log.info("getBankCardData");
         System.out.println("Enter Your Bank Card data: ");
         System.out.println("Card Number:");
         Long cardNumber = getLongNum();
@@ -181,6 +188,7 @@ public class InstallmentMenu {
 
 
     private static LoanType getLoanType(){
+        log.info("getLoanType");
         System.out.println("""
                 select type of loan you want to see :
                 1-TUITION

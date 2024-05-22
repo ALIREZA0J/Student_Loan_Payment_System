@@ -5,6 +5,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -17,7 +18,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
+@Slf4j
 public class BaseServiceImpl <T extends BaseEntity<ID>,
         ID extends Serializable ,
         R extends BaseRepository<T,ID>>
@@ -52,7 +53,7 @@ public class BaseServiceImpl <T extends BaseEntity<ID>,
 
     @Override
     public T saveOrUpdate(T entity) {
-
+        log.info("save entity");
 
         if (!validate(entity))
             return null;
@@ -74,6 +75,7 @@ public class BaseServiceImpl <T extends BaseEntity<ID>,
 
     @Override
     public Optional<T> findById(ID id) {
+        log.info("find entity by id");
         try (Session session = sessionFactory.getCurrentSession()){
             session.beginTransaction();
             Optional<T> findEntity = repository.findById(id);

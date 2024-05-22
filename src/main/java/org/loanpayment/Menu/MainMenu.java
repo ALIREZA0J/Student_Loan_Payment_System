@@ -1,17 +1,18 @@
 package org.loanpayment.Menu;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.loanpayment.model.*;
 import org.loanpayment.model.enums.*;
 import java.time.LocalDate;
 import java.util.Optional;
 import static org.loanpayment.Menu.Inputs.*;
-
+@Slf4j
 public class MainMenu {
 
 
     public void menu(){
-
+        log.info("start main menu.");
 
         System.out.println("|---------------------------------------------|");
         System.out.println("|         WELCOME TO LOAN PAYMENT SYSTEM      |");
@@ -30,6 +31,7 @@ public class MainMenu {
                 default -> System.out.println("Error 404 not found");
             }
         } catch (Exception e) {
+            log.error(e.getMessage());
             System.out.println(e.getMessage());
             System.out.println("!!!WRONG!!!");
         }
@@ -38,6 +40,7 @@ public class MainMenu {
 
 
     private void login(){
+        log.info("Login start");
         System.out.println("Welcome back.");
 
 
@@ -50,17 +53,18 @@ public class MainMenu {
 
             Optional<Student> student = STUDENT_SERVICE.findByUsernameAndPassword(username,password);
             if (student.isPresent()) {
+                log.info("user found in database system");
                 StudentMenu.studentDashboard(student.get());
                 flag = false;
             } else {
-                System.out.println("Username or password unCorrect !!!!");
+                log.warn("Username or password unCorrect !!!!");
                 System.out.println("Please Try Again ... ");
             }
         }
     }
 
     private void signup(){
-        System.out.println("                                          ");
+        log.info("signup start");
         Person person = getPerson();
         Student student = getStudent(person);
 
@@ -74,6 +78,7 @@ public class MainMenu {
     }
 
     private void getBankcardData(Student student){
+        log.info("get bank card data.");
         System.out.println("Now You Should Enter Your Bank Card Data Which You Want To Give Loan: ");
         BankType bankType = getBankType();
         System.out.println("Enter Your Card Number: ");
@@ -94,6 +99,7 @@ public class MainMenu {
 
 
     private  BankType getBankType(){
+        log.info("get bank type");
         System.out.println("""
                 Select Bank name:
                 1-Maskan
@@ -118,6 +124,7 @@ public class MainMenu {
 
 
     protected static Person getPerson(){
+        log.info("get person data.");
         System.out.println("Enter First Name :");
         String fName = Inputs.getString();
         System.out.println("Enter Last Name:");
@@ -141,6 +148,7 @@ public class MainMenu {
     }
 
     private Student getStudent(Person person){
+        log.info("get student data.");
         System.out.println("Enter Your Student Code: ");
         Long studentCode = getLongNum();
         Section section = getSection();
@@ -162,6 +170,7 @@ public class MainMenu {
     }
 
     private  University getUniversity(){
+        log.info("get university data.");
         System.out.println("Select Your University: ");
         UNIVERSITY_SERVICE.findAll().forEach(System.out::println);
         Long idOfUniversity = getLongNum();
@@ -169,6 +178,7 @@ public class MainMenu {
     }
 
     private  Semester getEnterSemester(){
+        log.info("get semester data.");
         System.out.println("Select You Entry Semester: ");
         SEMESTER_SERVICE.findAll().forEach(System.out::println);
         Long idOfSemester = getLongNum();
@@ -176,6 +186,7 @@ public class MainMenu {
     }
 
     protected static City getCity(){
+        log.info("get city data.");
         System.out.println("""
                 Choose birth city:
                 1- TEHRAN
@@ -251,6 +262,7 @@ public class MainMenu {
     }
 
     private  static Gender getGender(){
+        log.info("get gender data.");
         System.out.println("""
                 Choose Your Sex:
                 1-Male
@@ -268,6 +280,7 @@ public class MainMenu {
         return gender;
     }
     private  Section getSection(){
+        log.info("get section data.");
         System.out.println("""
                 Choose Section:
                 1-ASSOCIATE
@@ -296,6 +309,7 @@ public class MainMenu {
     }
 
     private  MaritalStatus getMaritalStatus(){
+        log.info("get marital data.");
         System.out.println("""
                 Your Marital Status
                 1-SINGLE
@@ -312,6 +326,7 @@ public class MainMenu {
     }
 
     private  boolean dormitoryUserOrNot(){
+        log.info("get dormitory data.");
         System.out.println("""
                 Are You Use Dormitory?
                 1-Yes

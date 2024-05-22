@@ -1,5 +1,6 @@
 package org.loanpayment.Menu;
 
+import lombok.extern.slf4j.Slf4j;
 import org.loanpayment.model.*;
 import org.loanpayment.model.enums.*;
 
@@ -10,10 +11,11 @@ import static org.loanpayment.Menu.Inputs.*;
 import static org.loanpayment.Menu.MainMenu.getCity;
 import static org.loanpayment.Menu.MainMenu.getPerson;
 
-
+@Slf4j
 public class LoanMenu {
 
     public static void loanMenu(Student student) {
+        log.info("loan menu start");
         boolean flag = true;
         while (flag) {
             System.out.println("|----------------------------------------|");
@@ -40,16 +42,20 @@ public class LoanMenu {
     }
 
     private static void tuitionLoan(Student student) {
-
+        log.info("tuitionLoan check for student");
         if (student.getUniversity().getUniversityType().equals(UniversityType.DOLATI_ROZANE)) {
-            System.out.println("You are not allowed to receive a tuition loan.");
-            System.out.println("The reason is your university is DOLATI_ROZANE.");
+            log.warn("You are not allowed to receive a tuition loan.");
+            log.warn("The reason is your university is DOLATI_ROZANE.");
+//            System.out.println("You are not allowed to receive a tuition loan.");
+//            System.out.println("The reason is your university is DOLATI_ROZANE.");
         } else {
             Optional<Loan> loan = LOAN_SERVICE
                     .findByStudentAndSemesterAndLoanType(student, CURRENT_SEMESTER, LoanType.TUITION);
             if (loan.isPresent()) {
-                System.out.println("You are not allowed to receive the loan.\n" +
+                log.warn("You are not allowed to receive the loan.\n" +
                         "The reason is you received this loan in current semester recently.");
+//                System.out.println("You are not allowed to receive the loan.\n" +
+//                        "The reason is you received this loan in current semester recently.");
             } else {
                 Loan newLoan = null;
                 Section section = student.getSection();
@@ -78,17 +84,21 @@ public class LoanMenu {
                 calculateLoanInstallmentsAndRegistration(saveNewLoan);
                 System.out.println("Tuition loan with amount " + saveNewLoan.getAmount() + " registered for you.");
                 depositingLoanMoneyToTheStudentAccount(student, saveNewLoan);
+                log.info("loan registered");
             }
         }
 
     }
 
     private static void educationLoan(Student student) {
+        log.info("educationLoan check for student");
         Optional<Loan> loan = LOAN_SERVICE
                 .findByStudentAndSemesterAndLoanType(student, CURRENT_SEMESTER, LoanType.EDUCATION);
         if (loan.isPresent()) {
-            System.out.println("You are not allowed to receive the loan.\n" +
+            log.warn("You are not allowed to receive the loan.\n" +
                     "The reason is you received this loan in current semester recently.");
+//            System.out.println("You are not allowed to receive the loan.\n" +
+//                    "The reason is you received this loan in current semester recently.");
         } else {
             Loan newLoan = null;
             Section section = student.getSection();
@@ -117,17 +127,20 @@ public class LoanMenu {
             calculateLoanInstallmentsAndRegistration(saveNewLoan);
             System.out.println("Education loan with amount " + saveNewLoan.getAmount() + " registered for you.");
             depositingLoanMoneyToTheStudentAccount(student, saveNewLoan);
+            log.info("loan registered");
         }
     }
 
     private static void housingLoan(Student student) {
-
+        log.info("housingLoan check for student");
         if (student.getDormitoryUser().equals(true)) {
-            System.out.println("You are not allowed to receive a housing loan.");
-            System.out.println("The reason is you use dormitory.");
+            log.warn("You are not allowed to receive a housing loan.\"The reason is you use dormitory.\"");
+//            System.out.println("You are not allowed to receive a housing loan.");
+//            System.out.println("The reason is you use dormitory.");
         } else if (student.getMaritalStatus().equals(MaritalStatus.SINGLE)) {
-            System.out.println("You are not allowed to receive a housing loan.");
-            System.out.println("The reason is you are not married.");
+            log.warn("You are not allowed to receive a housing loan.\"The reason is you are not married.\"");
+//            System.out.println("You are not allowed to receive a housing loan.");
+//            System.out.println("The reason is you are not married.");
         } else {
 
             Optional<Spouse> studentAsSpouse = SPOUSE_SERVICE.findByNationalCode(student.getNationalCode());
@@ -216,6 +229,7 @@ public class LoanMenu {
 
 
     private static void registerHousingLoan(Student student, RentHouse rentHouse) {
+        log.info("registerHousingLoan");
         Loan newLoan = null;
         Section section = student.getSection();
         if (rentHouse.getProvince().equals(City.TEHRAN)) {
@@ -245,6 +259,7 @@ public class LoanMenu {
 
 
     private static Optional<Spouse> getSpouseOfStudent(Student partnerStudent) {
+        log.info("getSpouseOfStudent");
         System.out.println("""
                 You must enter your spouse's information.
                 Is your spouse a student?
@@ -282,6 +297,7 @@ public class LoanMenu {
     }
 
     private static void depositingLoanMoneyToTheStudentAccount(Student student, Loan saveNewLoan) {
+        log.info("depositingLoanMoneyToTheStudentAccount");
         BankCard bankCard = BANK_CARD_SERVICE.findByStudent(student).get();
         bankCard.setInventory(bankCard.getInventory()+saveNewLoan.getAmount());
         BANK_CARD_SERVICE.saveOrUpdate(bankCard);
@@ -290,6 +306,7 @@ public class LoanMenu {
 
 
     private static boolean checkIsTheCityOfRentHouseInTheMetropolis(City city) {
+        log.info("checkIsTheCityOfRentHouseInTheMetropolis");
         if (city.equals(City.GUILAN) || city.equals(City.ESFAHAN) || city.equals(City.EAST_AZARBAIJAN)
                 || city.equals(City.FARS) || city.equals(City.KHUZESTAN) || city.equals(City.QOM)
                 || city.equals(City.KHORASAN_RAZAVI) || city.equals(City.ALBORZ)
@@ -300,6 +317,7 @@ public class LoanMenu {
 
 
     private static void calculateLoanInstallmentsAndRegistration(Loan loan) {
+        log.info("calculateLoanInstallmentsAndRegistration");
         double interestRate = 0.04;
         int numberOfMonths = 60;
         double amount = loan.getAmount() + (loan.getAmount() * interestRate * 5);
@@ -321,6 +339,7 @@ public class LoanMenu {
     }
 
     private static LocalDate specifyTheStartDateOfTheInstallments(Loan loan) {
+        log.info("specifyTheStartDateOfTheInstallments");
         Section section = loan.getLoanSection();
         LocalDate firstDueDate = loan.getLoanDate();
 
@@ -341,6 +360,7 @@ public class LoanMenu {
 
 
     private static Optional<RentHouse> saveStudentRentHouseData(Student student) {
+        log.info("saveStudentRentHouseData");
         System.out.println("*****Rent House data*****");
         City city = getCity();
         System.out.println("Enter the postal code: ");
